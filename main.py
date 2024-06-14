@@ -21,9 +21,11 @@ def main():
     nav_items = nav[2].find_elements(By.XPATH, './div/div/ul/li/a')
 
     for nav_item in nav_items:
-        nav_item.click()
-        if not 'menu__link-sub' in nav_item.get_attribute('class'):
+        if 'menu__link-sub' not in nav_item.get_attribute('class'):
+            nav_item.click()
             driver.back()
+        else:
+            nav_item.click()
         
 
 if __name__ == '__main__':
