@@ -5,8 +5,10 @@ import time
 import requests
 from colored import fore, back, style
 
+url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
+
 driver = webdriver.Chrome()
-driver.get("https://uwaterloo.ca/civil-environmental-engineering-information-technology")
+driver.get(url)
 
 broken_links = 0
 
@@ -91,7 +93,8 @@ def submenu(subnav):
 
         subnav.click()
         pause()
-        subnav_item.click()
+        # subnav_item.click()
+        driver.get(subnav_item.get_attribute('href'))
         page()
         pause()
         driver.back()
