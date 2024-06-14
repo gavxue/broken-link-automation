@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
+import requests
 
 driver = webdriver.Chrome()
 driver.get("https://uwaterloo.ca/civil-environmental-engineering-information-technology")
@@ -10,15 +11,30 @@ driver.get("https://uwaterloo.ca/civil-environmental-engineering-information-tec
 def pause():
     time.sleep(0.1)
 
+
+def check_status(link):
+    url = link.get_attribute('href')
+
+    if not url:
+        print('error')
+    elif 'mailto' in url:
+        print('mail')
+    else:
+        try:
+            response = requests.get(url, timeout=10)
+            print(url, response.status_code)
+        except requests.exceptions.Timeout:
+            print('timed out')
+        
+
 def page():
-    body = driver.find_element(By.TAG_NAME, 'main')
-    links = body.find_elements(By.TAG_NAME, 'a')
+    main = driver.find_element(By.TAG_NAME, 'main')
+    links = main.find_elements(By.TAG_NAME, 'a')
 
+    print('PAGE')
     for link in links:
-        link.click()
-        driver.back()
+        check_status(link)
 
-    print(links)
 
 def subsubmenu(subnav, subsubnav):
     subsubnav_items = subsubnav.find_elements(By.XPATH, '../ul/li/a')
@@ -41,6 +57,7 @@ def submenu(subnav):
         subnav.click()
         pause()
         subnav_item.click()
+        page()
         pause()
         driver.back()
         pause()
@@ -60,7 +77,7 @@ def menu():
             submenu(nav_item)
         else:
             nav_item.click()
-            # page()
+            page()
             driver.back()
         
 
