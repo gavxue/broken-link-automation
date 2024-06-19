@@ -44,7 +44,7 @@ def check_status(link):
     else:
         try:
             response = requests.get(url, timeout=10)
-            if response.status_code == 403:
+            if response.status_code == 403 or response.status_code == 401:
                 color = color_warning
                 status = "AUTHORIZATION REQUIRED FOR LINK (NEEDS MANUAL CHECK)"
             elif response.status_code != 200:
