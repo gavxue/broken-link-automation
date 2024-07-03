@@ -28,7 +28,7 @@ def pause():
 def check_status(link):
     global broken_links
 
-    text = link.text
+    text = link.get_attribute('textContent').strip()
     status = "HTTP 200 OK"
     color = color_success
 
