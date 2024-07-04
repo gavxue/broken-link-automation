@@ -39,7 +39,7 @@ def pause():
 def check_status(link):
     global broken_links
 
-    text = link.get_attribute('textContent').strip()
+    text = ' '.join(link.get_attribute('textContent').split())
     status = "HTTP 200 OK"
     color = color_success
 
@@ -82,66 +82,8 @@ def page():
         check_status(link)
 
 
-def subsubmenu(subnav, subsubnav):
-    subsubnav_items = subsubnav.find_elements(By.XPATH, '../ul/li/a')
-    
-    # navigates through subsub menu (lol)
-    for subsubnav_item in subsubnav_items:
-        text = subsubnav_item.find_element(By.TAG_NAME, 'span').get_attribute('textContent').strip()
-        print(f"{color_submenu}--- {text} ---{style('reset')}")
-
-        subnav.click()
-        pause()
-        driver.get(subsubnav_item.get_attribute('href'))
-        page()
-        pause()
-        driver.back()
-        pause()
-
-
-def submenu(subnav):
-    subnav_items = subnav.find_elements(By.XPATH, '../ul/li/a')
-    
-    # navigates through sub menu
-    for subnav_item in subnav_items:
-        text = subnav_item.find_element(By.TAG_NAME, 'span').get_attribute('textContent').strip()
-        print(f"{color_submenu}--- {text} ---{style('reset')}")
-
-        submenu = False
-        li = subnav_item.find_element(By.XPATH, '..')
-        if 'has-submenu' in li.get_attribute('class'):
-            submenu = True
-
-        subnav.click()
-        pause()
-        # subnav_item.click()
-        driver.get(subnav_item.get_attribute('href'))
-        page()
-        pause()
-        driver.back()
-        pause()
-        # time.sleep(3)
-        
-        if submenu:    
-            subsubmenu(subnav, subnav_item) 
-
-
 def menu():
     nav = driver.find_elements(By.TAG_NAME, "nav")
-    # nav_main = nav[2]
-    # nav_items = nav_main.find_elements(By.XPATH, './div/div/ul/li/a')
-
-    # # navigates through menu
-    # for nav_item in nav_items:
-    #     text = nav_item.find_element(By.TAG_NAME, 'span').text.upper()
-    #     print(f"{color_menu}===== {text} ====={style('reset')}")
-
-    #     if 'menu__link-sub' in nav_item.get_attribute('class'):
-    #         submenu(nav_item)
-    #     else:
-    #         nav_item.click()
-    #         page()
-    #         driver.back()
    
     a = nav[2].find_elements(By.TAG_NAME, 'a')
     if len(nav) == 4:
