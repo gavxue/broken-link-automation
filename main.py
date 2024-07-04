@@ -5,7 +5,6 @@ import time
 import requests
 from colored import fore, back, style
 
-from modules import Link
 
 # url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
 url = "https://uwaterloo.ca/civil-environmental-engineering"
@@ -30,6 +29,12 @@ headers = {
     'Content-Type': 'application/json',
     'accept': 'application/json'
 }
+
+# class
+class Link:
+    def __init__(self, title, url):
+        self.title = title
+        self.url = url
 
 
 def pause():
