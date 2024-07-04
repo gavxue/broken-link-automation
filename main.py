@@ -5,7 +5,12 @@ import time
 import requests
 from colored import fore, back, style
 
-url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
+from modules import Link
+
+# url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
+url = "https://uwaterloo.ca/civil-environmental-engineering"
+# url = "https://uwaterloo.ca/engineering/"
+
 
 driver = webdriver.Chrome()
 driver.get(url)
@@ -20,9 +25,15 @@ color_menu = f"{style('bold')}{fore('magenta')}{back('yellow')}"
 color_submenu = f"{style('bold')}{fore('blue')}"
 color_prompt = f"{fore('cyan')}"
 
+# request headers
+headers = {
+    'Content-Type': 'application/json',
+    'accept': 'application/json'
+}
+
 
 def pause():
-    time.sleep(0.1)
+    time.sleep(0.5)
 
 
 def check_status(link):
@@ -43,7 +54,7 @@ def check_status(link):
         color = color_warning
     else:
         try:
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=10, headers=headers)
             if response.status_code == 403 or response.status_code == 401:
                 color = color_warning
                 status = "AUTHORIZATION REQUIRED FOR LINK (NEEDS MANUAL CHECK)"
@@ -54,6 +65,10 @@ def check_status(link):
         except requests.exceptions.Timeout:
             color = color_error
             status = "HTTP 408 Request Timeout"
+            broken_links += 1
+        except:
+            color = color_error
+            status = "Unknown error occured (needs manual check)"
             broken_links += 1
 
     print(f"{color}{text} - {status}{style('reset')}")
@@ -92,7 +107,10 @@ def submenu(subnav):
         text = subnav_item.find_element(By.TAG_NAME, 'span').get_attribute('textContent').strip()
         print(f"{color_submenu}--- {text} ---{style('reset')}")
 
+        submenu = False
         li = subnav_item.find_element(By.XPATH, '..')
+        if 'has-submenu' in li.get_attribute('class'):
+            submenu = True
 
         subnav.click()
         pause()
@@ -102,31 +120,45 @@ def submenu(subnav):
         pause()
         driver.back()
         pause()
-
-        if 'has-submenu' in li.get_attribute('class'):    
+        # time.sleep(3)
+        
+        if submenu:    
             subsubmenu(subnav, subnav_item) 
 
 
 def menu():
     nav = driver.find_elements(By.TAG_NAME, "nav")
-    nav_main = nav[2]
-    nav_items = nav_main.find_elements(By.XPATH, './div/div/ul/li/a')
+    # nav_main = nav[2]
+    # nav_items = nav_main.find_elements(By.XPATH, './div/div/ul/li/a')
 
-    # navigates through menu
+    # # navigates through menu
+    # for nav_item in nav_items:
+    #     text = nav_item.find_element(By.TAG_NAME, 'span').text.upper()
+    #     print(f"{color_menu}===== {text} ====={style('reset')}")
+
+    #     if 'menu__link-sub' in nav_item.get_attribute('class'):
+    #         submenu(nav_item)
+    #     else:
+    #         nav_item.click()
+    #         page()
+    #         driver.back()
+   
+    a = nav[2].find_elements(By.TAG_NAME, 'a')
+    if len(nav) == 4:
+        a = a + nav[3].find_elements(By.TAG_NAME, 'a')
+    
+    nav_items = []
+    for link in a:
+        if link.get_attribute('href'):
+            nav_items.append(Link(link.get_attribute('textContent').strip(), link.get_attribute('href')))
+
     for nav_item in nav_items:
-        text = nav_item.find_element(By.TAG_NAME, 'span').text.upper()
-        print(f"{color_menu}===== {text} ====={style('reset')}")
-
-        if 'menu__link-sub' in nav_item.get_attribute('class'):
-            submenu(nav_item)
-        else:
-            nav_item.click()
-            page()
-            driver.back()
+        print(f"{color_menu}--- {nav_item.title} ---{style('reset')}")
+        driver.get(nav_item.url)
+        page()
         
 
 def main():
-    print(broken_links)
     print(f"{color_prompt}Starting broken link check automation...{style('reset')}")
     menu()
     print(f"{color_prompt}Done!{style('reset')}")
