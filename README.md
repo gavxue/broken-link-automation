@@ -12,3 +12,6 @@ Update: visit the [new web version](https://github.com/gaxvue/broken-link-checke
 1. Open up Power Automate for Desktop and create a new flow.
 2. Paste all the contents from flow.txt directly into the flow. You should be able to see the actions appear.
 3. Run the flow. It will prompt you with further instructions.
+
+## Images
+![image](https://github.com/user-attachments/assets/80b9ddf1-9ca0-4cc9-94e1-245a6409fb19)
