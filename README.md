@@ -1,6 +1,6 @@
 # Broken Link Automation 🔗
 
-An automatation script that checks for broken links on the CEE IT website. Estimated runtime is around 1-2 minutes.
+An automation script that checks for broken links on the CEE IT website. Estimated runtime is around 1-2 minutes.
 
 Update: visit the [new web version](https://github.com/gaxvue/broken-link-checker) for a better user experience.
 
