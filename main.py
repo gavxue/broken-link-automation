@@ -6,8 +6,8 @@ import requests
 from colored import fore, back, style
 
 
-# url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
-url = "https://uwaterloo.ca/civil-environmental-engineering"
+url = "https://uwaterloo.ca/civil-environmental-engineering-information-technology"
+# url = "https://uwaterloo.ca/civil-environmental-engineering"
 # url = "https://uwaterloo.ca/engineering/"
 
 
