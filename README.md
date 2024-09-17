@@ -2,7 +2,7 @@
 
 An automation script that checks for broken links on the CEE IT website. Estimated runtime is around 1-2 minutes.
 
-Update: visit the [new web version](https://github.com/gaxvue/broken-link-checker) for a better user experience.
+Update: visit the [new web version](https://github.com/gavxue/broken-link-checker) for a better user experience.
 
 ## Tech Stack
 - Python
